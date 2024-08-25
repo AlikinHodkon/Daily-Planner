@@ -5,13 +5,13 @@ import ArrowRight from "./components/ArrowRight";
 import ArrowLeft from "./components/ArrowLeft";
 
 function App() {
-  const date = Date.now();
+  const time = Date.now();
   const [isNext, setIsNext] = useState<boolean>(false);
   const [days, setDays] = useState<IDays[]>([]);
   const [tasks, setTasks] = useState<ITask[]>(localStorage.getItem("dailyTasks") ? JSON.parse(localStorage.getItem("dailyTasks") || "") : []);
-  function addTask(task: string, date: string){
-    setTasks([...tasks, {id: Date.now(), date: date, isComplete: false, task: task}]);
-    localStorage.setItem("dailyTasks", JSON.stringify([...tasks, {id: Date.now(), date: date, isComplete: false, task: task}]));
+  function addTask(task: string, date: string, time: number){
+    setTasks([...tasks, {id: Date.now(), date: date, time: time, isComplete: false, task: task}]);
+    localStorage.setItem("dailyTasks", JSON.stringify([...tasks, {id: Date.now(), date: date, time: time, isComplete: false, task: task}]));
   }
   function deleteTask(id: number){
     setTasks(tasks.filter((t) => t.id !== id));
@@ -32,23 +32,23 @@ function App() {
     'ВС'
   ];
   function generatePreviousDays(start: number, end: number){
-    const days: IDays[] = [{id: 7, name: 'ВС', date: new Date(date).toLocaleDateString() }];
+    const days: IDays[] = [{id: 7, name: 'ВС', time: time, date: new Date(time).toLocaleDateString() }];
     for (let i = start; i >= end; i--){
-      days.unshift({id: i, name: daysWeek[i], date: new Date(date-(24*60*60*1000)*(start-i+1)).toLocaleDateString() });
+      days.unshift({id: i, name: daysWeek[i], time: time-(24*60*60*1000)*(start-i+1), date: new Date(time-(24*60*60*1000)*(start-i+1)).toLocaleDateString() });
     }
     return days;
   }
   function generateOthersDays(start: number, end: number){
     const days: IDays[] = [];
     for (let i = start; i <= end; i++){
-      days.push({id: i, name: daysWeek[i], date: new Date(date+(24*60*60*1000)*i).toLocaleDateString() });
+      days.push({id: i, name: daysWeek[i], time: time+(24*60*60*1000)*i,  date: new Date(time+(24*60*60*1000)*i).toLocaleDateString() });
     }
     return days;
   }
   function generateNextDays(start: number, end: number){
     const days: IDays[] = [];
     for (let i = start; i <= end; i++){
-      days.push({id: i+7, name: daysWeek[i], date: new Date(date+(24*60*60*1000)*i).toLocaleDateString() });
+      days.push({id: i+7, name: daysWeek[i], time:time+(24*60*60*1000)*i,  date: new Date(time+(24*60*60*1000)*i).toLocaleDateString() });
     }
     return days;
   }
@@ -56,30 +56,37 @@ function App() {
     switch(new Date().getDay()){
       case 0:{
         setDays(generatePreviousDays(6, 1).concat(generateNextDays(1,7)));
+        setTasks(tasks.filter((task) => task.time >= days[0].time));
         return;
       }
       case 1:{
         setDays(generateOthersDays(2, 7).concat(generateNextDays(1,7)));
+        setTasks(tasks.filter((task) => task.time >= days[0].time));
         return;
       }
       case 2:{
         setDays(generatePreviousDays(1, 1).concat(generateOthersDays(3,7)).concat(generateNextDays(1,7)));
+        setTasks(tasks.filter((task) => task.time >= days[0].time));
         return;
       }
       case 3:{
         setDays(generatePreviousDays(2, 1).concat(generateOthersDays(4,7)).concat(generateNextDays(1,7)));
+        setTasks(tasks.filter((task) => task.time >= days[0].time));
         return;
       }
       case 4:{
         setDays(generatePreviousDays(3, 1).concat(generateOthersDays(5,7)).concat(generateNextDays(1,7)));
+        setTasks(tasks.filter((task) => task.time >= days[0].time));
         return;
       }
       case 5:{
         setDays(generatePreviousDays(4, 1).concat(generateOthersDays(6,7)).concat(generateNextDays(1,7)));
+        setTasks(tasks.filter((task) => task.time >= days[0].time));
         return;
       }      
       case 6:{
         setDays(generatePreviousDays(5, 1).concat(generateOthersDays(7,7)).concat(generateNextDays(1,7)));
+        setTasks(tasks.filter((task) => task.time >= days[0].time));
         return;
       }
     }

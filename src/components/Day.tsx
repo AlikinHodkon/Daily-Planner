@@ -5,7 +5,7 @@ import Task from "./Task";
 interface DayProps{
     day: IDays,
     tasks: ITask[],
-    addTask: (task: string, date: string) => void,
+    addTask: (task: string, date: string, time: number) => void,
     deleteTask: (id: number) => void,
     changeTask: (id: number, isCompleted: boolean) => void
 }
@@ -21,7 +21,7 @@ export default function Day({day, tasks, addTask, deleteTask, changeTask}: DayPr
         {tasks.map((task) => <Task key={task.id} task={task} deleteTask={deleteTask} changeTask={changeTask} />)}
         <div className="flex w-full mt-2">
             <input ref={inputRef} type="text" className="w-3/4 pl-2 rounded-xl border-black border-[2px]" onChange={(e) => setTask(e.target.value)} placeholder="Дело" />
-            <button className="w-1/3" onClick={() => {addTask(task, day.date); inputRef.current.value = ""}}>Добавить</button>
+            <button className="w-1/3" onClick={() => {addTask(task, day.date, day.time); inputRef.current.value = ""}}>Добавить</button>
         </div>
     </div>
   )
