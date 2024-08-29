@@ -11,9 +11,9 @@ interface TaskProps{
 export default function Task({task, deleteTask, changeTask}: TaskProps) {
     const [isComplete, setIsComplete] = useState<boolean>(task.isComplete);
   return (
-    <div className={`flex mt-2 w-11/12 ml-auto mr-auto rounded-xl ${isComplete ? "bg-green-500" : "bg-red-500"}`}>
+    <div className={`flex mt-2 w-11/12 max-w-11/12 rounded-xl ${isComplete ? "bg-green-500" : "bg-red-500"}`}>
         <input checked={isComplete} onChange={() => {changeTask(task.id, !isComplete); setIsComplete(!isComplete);}} type="checkbox" className="ml-2" />
-        <p className={`${isComplete ? "line-through" : ""} text-center w-full`}>{task.task}</p>
+        <p className={`${isComplete ? "line-through" : ""} w-full text-center text-ellipsis overflow-hidden`}>{task.task}</p>
         <button className="ml-auto mr-2" onClick={() => deleteTask(task.id)}><Trash /></button>
     </div>
   )
